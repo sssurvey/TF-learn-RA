@@ -223,6 +223,9 @@ def jsonEdit(usname):
         json.dump(userName, f_obj)
     print("dumped")
 
+
+def toUpperCase4testing(someString):
+    return someString.upper()
             
 def main():
     """this is the practice function"""
@@ -270,7 +273,9 @@ def main():
 
     jsonEdit('hahaMyName')
 
-main()
+# correct way to run main in Python
+if __name__ == "__main__":
+    main()
 
 
 
