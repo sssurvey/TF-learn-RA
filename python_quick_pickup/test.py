@@ -1,3 +1,5 @@
+import json
+
 def ifStatementPractice():
     cars = ["audi", "mazada", "nissan"]
     for car in cars:
@@ -150,6 +152,77 @@ class Cuteness():
         print(self.cuteLevel)
 
 # ---------------------------------------------------------------------------------
+
+# everything about reading a file:
+def fileOpen():
+    """"it is also possible to implemnet the file path and open the file path as the file"""
+    # file_path = '/home/haominshi/files/filename.txt'
+    # with open(file_path) as pi_number
+
+    file_location = "pi.txt"
+
+    with open(file_location) as pi_number:
+        contents = pi_number.read()
+        print(contents)
+        print(contents.lstrip())
+    
+    """it is also possible to read the file line by line"""
+    with open(file_location) as pi_number:
+        for line in pi_number:
+            print(line)
+    # for reading line by line, notice there are is a empty line after line. it is because when you press
+    # enter in the file, there is a new line break at the end. what you need to do is to implement rstrip()
+    # to remove the line breaker
+    with open(file_location) as pi_number:
+        for line in pi_number:
+            print(line.rstrip()) # now the new line break has been cleared
+
+    # Making a list of lines from a file
+    with open(file_location) as pi_number:
+        lines = pi_number.readlines() # this will return the lines in the file as a LIST
+    print (lines)
+
+def workingWithFileContent():
+    file_loc = "pi.txt"
+    with open(file_loc) as file:
+        lines = file.readlines()
+    pi_string = ""
+    pi_string_2 = ""
+    for line in lines:
+        pi_string += line.rstrip() # white space on the left is included
+    for line in lines:
+        pi_string_2 += line.strip() #this one take away all the white spaces
+    
+    print (pi_string)
+    print (str(len(pi_string))) # basically what this did is that reading lines; from file (pi.txt)
+                                # and append the pi_string, like a string builder
+    print (pi_string_2)
+
+def writeOnFiles():
+    # flags in this one:
+        # 'r' read || no flag = read only
+        # 'w' write
+        # 'a' append    
+    file_loc = "pi.txt"
+    with open(file_loc,'a') as file:
+        file.write("JAVAVAVAVAVAVAVA #1 \n")
+
+
+def exceptionPractice(a,b):
+    try:
+        ans = a/b
+    except ZeroDivisionError:
+        print (" you cant divid by zero ")
+    else:
+        print(ans) # everything in the else will be execute if try block gose through without the exception
+    
+def jsonEdit(usname):
+    # to deal with JSON python need to import json
+    userName = usname
+    with open("user_name.json", 'w') as f_obj:
+        json.dump(userName, f_obj)
+    print("dumped")
+
             
 def main():
     """this is the practice function"""
@@ -189,6 +262,13 @@ def main():
     my_cute_dog.cutness.howCute()
     my_cute_dog.cutness.cuteLevel = "Uber CUTE"
     my_cute_dog.cutness.howCute()
+
+    fileOpen();workingWithFileContent()
+    writeOnFiles()
+
+    exceptionPractice (0,0)
+
+    jsonEdit('hahaMyName')
 
 main()
 
