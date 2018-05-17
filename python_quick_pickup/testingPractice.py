@@ -16,7 +16,7 @@ class Survey():
 def main():
     question = "what language do you speak?"
     my_survey = Survey(question)
-    my_survey.show_question
+    my_survey.show_question()
     print("Press q to quit")
     while(True):
         answer = input("Enter the language you speak: ")
