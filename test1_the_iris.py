@@ -32,17 +32,12 @@ def analysisData(dataCata):
     clf = clf.fit(features,labels)
     return clf
 
-
-
 def main():
     # test_out = sheet1.cell(row=1, column=6).value
     # print(test_out)
     temp_data = collectData(sheet1)
     temp_tree = analysisData(temp_data)
     print(temp_tree.predict([[3.2, 3.1, 1.6, 0.2]]))
-
-
-
 
 if __name__ == "__main__":
     main()
