@@ -43,8 +43,8 @@ def building_tree(dataframe): #for building the tree, use the pieces[0]
     dataframe_train_set_features = dataframe_train_set.copy()
     dataframe_train_set_features = dataframe_train_set_features.drop(columns=['dcfdx'])
     # probably best to loop through the whole dataframe_training_set and drop the row with no dcfdx data
-    # 05/22
-    
+    # 05/22 - label nan need to drop row, feature nan can ignore data 
+
     for row in dataframe_train_set_features.iterrows():
         index, data = row
         features.append(data.tolist())
@@ -60,6 +60,7 @@ def building_tree(dataframe): #for building the tree, use the pieces[0]
     clf = tree.DecisionTreeClassifier()
     clf = clf.fit(features, labels)
     # have some problem, need to deal with NaN, thinking use neutural to replace them
+    # feature NaN replace, not yet label
     return clf
 
 

@@ -51,3 +51,17 @@ df3.loc[:,"D"] = np.array([5]*len(df3))
 print(df3)
 
 print(np.array([5]*3))
+
+pieces = [df3[:3],df3[3:]]
+print(pieces[0]); print(pieces[1])
+df4 = pd.concat(pieces)
+print (df4)
+
+df_grade = pd.DataFrame({"id": [1, 2, 3, 4, 5, 6], "raw_grade": 
+                  list('abbaae')})
+df_grade["grade"] = df_grade["raw_grade"].astype("category")
+print(df_grade["grade"])
+df_grade["grade"].cat.categories = ["very good", "good", "very bad"]
+df_grade["grade"] = df_grade["grade"].cat.set_categories(
+    ["very bad", "bad", "medium", "good", "very good"])
+print(df_grade)
