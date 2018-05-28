@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 # import seaborn as sns
+import matplotlib
 import matplotlib.pyplot as plt
 import pylab
 # import openpyxl as oxl
@@ -28,7 +29,26 @@ def analysis_2(df): # plot the changes one column by another
     for i in range(0, df.shape[1]):
         print (df[df.columns[i]])
         temp_df = df[df.columns[i]]
-        plt.figure(); temp_df.plot(); plt.title(all_the_column_names[i])
+        plt.grid();plt.figure(); temp_df.plot(); plt.title(all_the_column_names[i])
+    plt.show()
+
+def analysis_2_1(df, df1 = None):
+    all_the_column_names = df.columns.get_values()
+    all_the_column_names = all_the_column_names.tolist()
+
+    for i in range(0, df.shape[1]):
+        temp_series = df[df.columns[i]][2:5]
+        print (temp_series)
+        if df1.empty != True:
+            temp_series1 = df1[df1.columns[i]][2:5]
+            print("================df1")
+            print(temp_series1)
+            temp_series1.plot()
+
+        plt.grid()
+        plt.figure()
+        temp_series.plot()
+        plt.title(all_the_column_names[i])
     plt.show()
 
 def analysis_3(df):
@@ -61,11 +81,12 @@ def dataframe_compare_based_fuyearO(dataframe):
 def main():
     splitor =  "+++++++++++++++++++++++++++++++++++++++"
     writer_excel = pd.ExcelWriter('output.xlsx')
+    path = '/Users/haominshi/Desktop/al_data/individual.xlsx'
 
     df_1 = openExcelSheet(
-        '/Users/haominshi/Desktop/al_data/individual.xlsx',sheet_name="Sheet1")
+        path,sheet_name="Sheet1")
     df_2 = openExcelSheet(
-        '/Users/haominshi/Desktop/al_data/individual.xlsx', sheet_name="Sheet2")
+        path, sheet_name="Sheet2")
     
     # first, focus on the df1, find out the change of each value based on the time
     # visit to the clinic
@@ -77,8 +98,8 @@ def main():
     # do the same thing for the 2nd sbj, that has the alzheimer
     df_2_diff_based_on_year = dataframe_compare_based_fuyearO(df_2)
     df_2_diff_based_on_year.to_excel(writer_excel, 'I_DF 2 diff by year')
-    analysis_2(df_2_diff_based_on_year)
-
+    #analysis_2(df_2_diff_based_on_year)
+    analysis_2_1(df_2_diff_based_on_year , df_1_diff_based_on_year) #detailed look at status changing from (dcfdx = 0,2,4)
 
 
 
