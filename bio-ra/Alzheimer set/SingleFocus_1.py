@@ -65,7 +65,6 @@ def analysis_3(df):
 
 def dataframe_compare_based_fuyearO(dataframe):
     amount_of_rows = dataframe.shape[0] #amount of rows is acquired  by df.shape[0], df.shape[1] = amount of columns
-    # need to create a df to hold the the df that needed to be appended
     final_diff = pd.DataFrame(columns = dataframe.columns[5:89].values.tolist())
     for i in range(1, amount_of_rows):
         prev = i-1
