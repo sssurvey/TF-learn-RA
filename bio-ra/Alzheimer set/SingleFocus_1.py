@@ -5,24 +5,30 @@ import matplotlib.pyplot as plt
 import pylab
 # import openpyxl as oxl
 
-def openExcelSheet(path, sheet_name):
+def openExcelSheet(path, sheet_name): # convert the excelsheet to df
     dataframe_excel = pd.read_excel(path, sheet_name)
     print (dataframe_excel)  
     print ("------------clincal diagnosis------------")
     print (dataframe_excel["dcfdx"])  
     return dataframe_excel
 
-def analysis_1(df):
+def analysis_1(df): # plot out the chnages
     tmp_df = df[df.columns[5:89]]
     print (tmp_df)
     plt.figure(); tmp_df.plot()
     plt.show()
 
-def analysis_2(df):
-    for i in range(5,89):
+def analysis_2(df): # plot the changes one column by another
+    """
+    display the change based on each visit of cataglorized by columns, each values
+    is a row in that column
+    """
+    all_the_column_names = df.columns.get_values()
+    all_the_column_names = all_the_column_names.tolist()
+    for i in range(0, df.shape[1]):
         print (df[df.columns[i]])
         temp_df = df[df.columns[i]]
-        plt.figure(); temp_df.plot()
+        plt.figure(); temp_df.plot(); plt.title(all_the_column_names[i])
     plt.show()
 
 def analysis_3(df):
@@ -36,20 +42,46 @@ def analysis_3(df):
         monitor_dict[i] = change
     return monitor_dict
 
-        
+
+def dataframe_compare_based_fuyearO(dataframe):
+    amount_of_rows = dataframe.shape[0] #amount of rows is acquired  by df.shape[0], df.shape[1] = amount of columns
+    # need to create a df to hold the the df that needed to be appended
+    final_diff = pd.DataFrame(columns = dataframe.columns[5:89].values.tolist())
+    for i in range(1, amount_of_rows):
+        prev = i-1
+        print(prev)
+        diff_temp = dataframe.iloc[i][5:89] - dataframe.iloc[prev][5:89]
+        # it is the later year - the year before e.g = 2nd year - 1st year
+        final_diff = final_diff.append(diff_temp, ignore_index=True)
+        print(diff_temp)
+    return final_diff
+
 
 
 def main():
+    splitor =  "+++++++++++++++++++++++++++++++++++++++"
+    writer_excel = pd.ExcelWriter('output.xlsx')
+
     df_1 = openExcelSheet(
         '/Users/haominshi/Desktop/al_data/individual.xlsx',sheet_name="Sheet1")
     df_2 = openExcelSheet(
         '/Users/haominshi/Desktop/al_data/individual.xlsx', sheet_name="Sheet2")
-    # analysis_1(df_1)
-    df_dict_1 = analysis_3(df_1)
-    print (df_dict_1)
-    df_dict_2 = analysis_3(df_2)
-    print (df_dict_2)
-    # analysis_2(df_1)
+    
+    # first, focus on the df1, find out the change of each value based on the time
+    # visit to the clinic
+    # Data = Data frame 1, for a subj without alzheimer
+    # fu_year = 0~7, indicate the visit times
+    df_1_diff_based_on_year = dataframe_compare_based_fuyearO(df_1)
+    df_1_diff_based_on_year.to_excel(writer_excel, 'O_DF 1 diff by year')
+
+    # do the same thing for the 2nd sbj, that has the alzheimer
+    df_2_diff_based_on_year = dataframe_compare_based_fuyearO(df_2)
+    df_2_diff_based_on_year.to_excel(writer_excel, 'I_DF 2 diff by year')
+    analysis_2(df_2_diff_based_on_year)
+
+
+
+
 
 if __name__ == "__main__":
     main()
