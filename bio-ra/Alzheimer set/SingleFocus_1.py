@@ -8,9 +8,9 @@ import pylab
 
 def openExcelSheet(path, sheet_name): # convert the excelsheet to df
     dataframe_excel = pd.read_excel(path, sheet_name)
-    print (dataframe_excel)  
-    print ("------------clincal diagnosis------------")
-    print (dataframe_excel["dcfdx"])  
+    #print (dataframe_excel)  
+    #print ("------------clincal diagnosis------------")
+    #print (dataframe_excel["dcfdx"])  
     return dataframe_excel
 
 def analysis_1(df): # plot out the chnages
@@ -38,11 +38,11 @@ def analysis_2_1(df, df1 = None):
 
     for i in range(0, df.shape[1]):
         temp_series = df[df.columns[i]][2:5]
-        print (temp_series)
+        # print (temp_series)
         if df1.empty != True:
             temp_series1 = df1[df1.columns[i]][2:5]
-            print("================df1")
-            print(temp_series1)
+            # print("================df1")
+            # print(temp_series1)
             temp_series1.plot()
 
         plt.grid()
@@ -64,7 +64,7 @@ def analysis_3(df):
 
 
 def dataframe_compare_based_fuyearO(dataframe):
-    amount_of_rows = dataframe.shape[0] #amount of rows is acquired  by df.shape[0], df.shape[1] = amount of columns
+    amount_of_rows = dataframe.shape[0] #amount of rows is acquired by df.shape[0], df.shape[1] = amount of columns
     final_diff = pd.DataFrame(columns = dataframe.columns[5:89].values.tolist())
     for i in range(1, amount_of_rows):
         prev = i-1

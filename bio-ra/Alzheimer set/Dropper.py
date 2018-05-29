@@ -4,7 +4,6 @@ import pandas
 
 def drop_none_important_features(df):
     del df["anemia_who"]
-
     del df["bun"]
     del df["cl"]
     del df["co2"]
@@ -15,7 +14,6 @@ def drop_none_important_features(df):
     del df["tga"]
     del df["tsh"]
     del df["wbc"]
-
     del df["confid_health"]
     del df["confid_instit"]
     del df["finfintot"]
@@ -30,11 +28,9 @@ def drop_none_important_features(df):
     del df["fin_literacy_pct"]
     del df["health_literacy_pct"]
     del df["literacy_total_pct"]
-
     del df["thyroid_cum"]
     del df["chf_cum"]
     del df["heart_cum"]
-
     del df["antibiotic_rx"]
     del df["antihyp_all_rx"]
     del df["antineoplastic_rx"]
@@ -45,7 +41,6 @@ def drop_none_important_features(df):
     del df["gastrointestinal_rx"]
     del df["hemotologic_rx"]
     del df["lipid_lowering_rx"]
-
     del df["musculoskeletal_rx"]
     del df["ophthalmic_rx"]
     del df["otic_rx"]
@@ -56,7 +51,6 @@ def drop_none_important_features(df):
     del df["antiinfective_rx"]
     del df["vaccine_rx"]
     del df["antiarrhythmic_rx"]
-
     del df["diabetes_rx"]
     del df["antacid_rx"]
     del df["antidiarrheal_rx"]
@@ -88,5 +82,16 @@ def drop_none_important_features(df):
     del df["estrogen_vaginal_rx"]
     del df["urinary_antispas_rx"]
     del df["urinary_inc_rx"]
-
     return df #cleaned df
+
+def clean_history(df):
+    """
+    drop the patient that has prev sickness history that might affect the
+    final result of dcfdx
+    from Charu
+    """
+    df = df[df.cancer_cum != 1]     # cancer
+    df = df[df.dm_cum != 1]         # diabetes
+    df = df[df.headinjrloc_cum !=1] # head injuries
+    df = df[df.analgesic_rx != 1]   # analgesic_rx
+    return df
