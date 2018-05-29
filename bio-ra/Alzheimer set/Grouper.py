@@ -38,19 +38,19 @@ def grouping(df):
                 counter_end_df_row += 1
             elif df.iloc[df_index]['projid'] != p_id:
                 break
-        print("List appended ===>>> " + str(p_id))
+        # print("List appended ===>>> " + str(p_id))
         list_of_patients.append(df[counter_start_df_row: counter_end_df_row])
         counter_start_df_row = counter_end_df_row
         counter_flag_start = counter_end_df_row
 
-    print (list_of_patients) #CHECKED
+    # print (list_of_patients) #CHECKED
     return list_of_patients # a list of df, that each element of the list is one patient
 
 def main():
     path = '/Users/haominshi/Desktop/al_data/dataset_576_long.xlsx'
     path_test = '/Users/haominshi/Desktop/al_data/dataset_testing_short.xlsx'
+    print ("Processing...")
     timer_1 = t.time()
-
     # =============================== Change path here
     data_set_everything = sf1.openExcelSheet(path, sheet_name="Sheet0")
     # data_set_everything = sf1.openExcelSheet(path_test, "Sheet1")
@@ -60,6 +60,7 @@ def main():
     timer_1 = t.time() - timer_1
     print (timer_1)
     print (data_set_everything.shape)
+    print ("DF loaded")
     # file transfered to DF
     timer_1 = t.time()
     # ==========================================================================
@@ -71,13 +72,17 @@ def main():
     print(timer_1)
     print(data_set_everything.shape)
     data_set_cleaned = data_set_everything.copy()
+    print("DF cleaned")
     # ==========================================================================
+    print("DF grouping")
     timer_1 = t.time()
     # list_of_patient = list of df based on each patient, each element of the list
     # is a patient, and in that patient, we have the DF for each of their visit
     list_of_patient = grouping(data_set_cleaned)
     timer_1 = t.time() - timer_1
     print(timer_1)
+    print("DF grouped dtype = list, total patient count is: " \
+    + str(len(list_of_patient)))
     # ==========================================================================
 
 
