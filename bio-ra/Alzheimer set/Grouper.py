@@ -29,30 +29,23 @@ def grouping(df):
     list_of_patients = []
     counter_start_df_row = 0 # used for slicing the df, first
     counter_end_df_row   = 0 # used for slicing the df, last
-
     df = df.reset_index(drop = True) # df reindexed
-
     row_count = df.shape[0]
+    # df_index = 0
+
+
+    # !!! problem horrible efficiency, need fix suspect df_index for loop issue
     for p_id in projid_list: # loop through the unique id list
-        print (p_id)
         for df_index in range(0, row_count):
             if df.iloc[df_index]['projid'] == p_id:
                 counter_end_df_row += 1
-                print (str(counter_start_df_row) + ' and ' + str(counter_end_df_row))
+            elif df.iloc[df_index]['projid'] != p_id:
+                print ("List appended ===>>> " + str(p_id))
                 continue
-            if df.iloc[df_index]['projid'] != p_id:
-                list_of_patients.append(
-                    df[counter_start_df_row: counter_end_df_row])
-                counter_start_df_row = counter_end_df_row
-                # print (df[counter_start_df_row:counter_end_df_row])
-                continue
-    print (list_of_patients[2])
-    # !!! problem, list only stored the DF based on the first patient...
-    # I think the problem is because of the index, need to ignore index
-    # print (df)
-                
-
-
+        list_of_patients.append(df[counter_start_df_row: counter_end_df_row])
+        counter_start_df_row = counter_end_df_row
+    # print (list_of_patients) CHECKED
+    return list_of_patients # a list of df, that each element of the list is one patient
 
 def main():
     path = '/Users/haominshi/Desktop/al_data/dataset_576_long.xlsx'
@@ -60,26 +53,33 @@ def main():
     timer_1 = t.time()
 
     # =============================== Change path here
-    # data_set_everything = sf1.openExcelSheet(path, sheet_name="Sheet0")
-    data_set_everything = sf1.openExcelSheet(path_test, "Sheet1")
+    data_set_everything = sf1.openExcelSheet(path, sheet_name="Sheet0")
+    # data_set_everything = sf1.openExcelSheet(path_test, "Sheet1")
     # ==========================================================================
     
+    # ==========================================================================
     timer_1 = t.time() - timer_1
     print (timer_1)
     print (data_set_everything.shape)
     # file transfered to DF
     timer_1 = t.time()
-
+    # ==========================================================================
     data_set_everything = dropper.drop_none_important_features(data_set_everything)
     # drop none important features
     data_set_everything = dropper.clean_history(data_set_everything)
-
+    # ==========================================================================
     timer_1 = t.time() - timer_1
     print(timer_1)
     print(data_set_everything.shape)
     data_set_cleaned = data_set_everything.copy()
-    # group -> create df for trend, plot all maybe
-    grouping(data_set_cleaned)
+    # ==========================================================================
+    timer_1 = t.time()
+    # list_of_patient = list of df based on each patient, each element of the list
+    # is a patient, and in that patient, we have the DF for each of their visit
+    list_of_patient = grouping(data_set_cleaned)
+    timer_1 = t.time() - timer_1
+    # ==========================================================================
+
 
 if __name__ == "__main__":
     main()
