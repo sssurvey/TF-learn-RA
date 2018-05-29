@@ -29,22 +29,21 @@ def grouping(df):
     list_of_patients = []
     counter_start_df_row = 0 # used for slicing the df, first
     counter_end_df_row   = 0 # used for slicing the df, last
+    counter_flag_start   = 0
     df = df.reset_index(drop = True) # df reindexed
-    row_count = df.shape[0]
-    # df_index = 0
 
-
-    # !!! problem horrible efficiency, need fix suspect df_index for loop issue
     for p_id in projid_list: # loop through the unique id list
-        for df_index in range(0, row_count):
+        for df_index in range(counter_flag_start, df.shape[0]): 
             if df.iloc[df_index]['projid'] == p_id:
                 counter_end_df_row += 1
             elif df.iloc[df_index]['projid'] != p_id:
-                print ("List appended ===>>> " + str(p_id))
-                continue
+                break
+        print("List appended ===>>> " + str(p_id))
         list_of_patients.append(df[counter_start_df_row: counter_end_df_row])
         counter_start_df_row = counter_end_df_row
-    # print (list_of_patients) CHECKED
+        counter_flag_start = counter_end_df_row
+
+    print (list_of_patients) #CHECKED
     return list_of_patients # a list of df, that each element of the list is one patient
 
 def main():
@@ -78,6 +77,7 @@ def main():
     # is a patient, and in that patient, we have the DF for each of their visit
     list_of_patient = grouping(data_set_cleaned)
     timer_1 = t.time() - timer_1
+    print(timer_1)
     # ==========================================================================
 
 
