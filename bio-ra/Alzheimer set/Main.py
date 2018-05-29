@@ -2,11 +2,11 @@ import numpy as np
 import pandas as pd
 # import seaborn as sns
 import matplotlib.pyplot as plt
-import pylab
 # import openpyxl as oxl
 import SingleFocus_1 as sf1
 import Dropper as dropper
 import time as t
+# from pylab import rcParams
 
 
 '''
@@ -46,6 +46,39 @@ def grouping(df):
     # print (list_of_patients) #CHECKED
     return list_of_patients # a list of df, that each element of the list is one patient
 
+def patient_analysis(list_of_patient_w, list_of_patient_wo):
+    """
+    list = [df1, df2, df3 ...]
+    Analysis DF on a patient based scale
+    """
+    for element in list: # element is a DF
+        print (element.describe())
+    pass
+
+def sort_patient(list_of_patient):
+    """
+    split the patient based of if the patient was diagnosed or not
+    """
+    list_of_patient_diagnosed = []      # with alzheimer
+    list_of_patient_not_diagnosed = []  # without alzheimer
+    diagonosed_flag = False
+
+    for patient in list_of_patient:
+        dcfdx_check_list = patient['dcfdx'].tolist()
+        for dcfdx_element in dcfdx_check_list:
+            if dcfdx_element >= 4: # >= 4 means diagnoised
+                diagonosed_flag = True
+                break
+        if (diagonosed_flag) == True:
+            list_of_patient_diagnosed.append(patient)
+            diagonosed_flag = False
+        else:
+            list_of_patient_not_diagnosed.append(patient)
+    
+    return list_of_patient_diagnosed, list_of_patient_not_diagnosed
+
+
+
 def main():
     path = '/Users/haominshi/Desktop/al_data/dataset_576_long.xlsx'
     path_test = '/Users/haominshi/Desktop/al_data/dataset_testing_short.xlsx'
@@ -53,7 +86,7 @@ def main():
     timer_1 = t.time()
     # =============================== Change path here
     data_set_everything = sf1.openExcelSheet(path, sheet_name="Sheet0")
-    # data_set_everything = sf1.openExcelSheet(path_test, "Sheet1")
+    #data_set_everything = sf1.openExcelSheet(path_test, "Sheet1")
     # ==========================================================================
     
     # ==========================================================================
@@ -83,6 +116,17 @@ def main():
     print(timer_1)
     print("DF grouped dtype = list, total patient count is: " \
     + str(len(list_of_patient)))
+    # ==========================================================================
+    print("DF sorting")
+    timer_1 = t.time()
+    list_of_patient_diagnosed, list_of_patient_not_diagnosed = \
+    sort_patient(list_of_patient) # return 2 list of patient, split by if diagnosed
+                                  # or not diagnosed
+    timer_1 = t.time() - timer_1
+    print(timer_1)
+    print("2 list generated, diagnosed, and not diagnosed")
+    print("Amount of patient diagnosed = " + str(len(list_of_patient_diagnosed)))
+    print("Amount of patient not diagnosed = " + str(len(list_of_patient_not_diagnosed)))
     # ==========================================================================
 
 
