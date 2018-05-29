@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-# import seaborn as sns
+import seaborn as sns
 import matplotlib.pyplot as plt
 # import openpyxl as oxl
 import SingleFocus_1 as sf1
@@ -29,9 +29,10 @@ def grouping(df):
     list_of_patients = []
     counter_start_df_row = 0 # used for slicing the df, first
     counter_end_df_row   = 0 # used for slicing the df, last
-    counter_flag_start   = 0
+    counter_flag_start   = 0 # "for loop" start index for df spliting based on unique ID
     df = df.reset_index(drop = True) # df reindexed
 
+    # messy
     for p_id in projid_list: # loop through the unique id list
         for df_index in range(counter_flag_start, df.shape[0]): 
             if df.iloc[df_index]['projid'] == p_id:
@@ -46,14 +47,24 @@ def grouping(df):
     # print (list_of_patients) #CHECKED
     return list_of_patients # a list of df, that each element of the list is one patient
 
-def patient_analysis(list_of_patient_w, list_of_patient_wo):
+def patient_analysis(list_of_patient_w, list_of_patient_wo = None):
     """
     list = [df1, df2, df3 ...]
     Analysis DF on a patient based scale
     """
-    for element in list: # element is a DF
-        print (element.describe())
-    pass
+    focus = "fu_year"
+    fig = plt.figure()
+    for df in list_of_patient_w:
+        for i in range (5,df.shape[1]):
+            plt.title(df[df.columns[i]].name)
+            plt.grid()
+            plt.xlabel = focus
+            plt.plot(df[focus], df[df.columns[i]])
+            plt.plot(df[focus], df['dcfdx'])
+            plt.show()
+
+    # need to finish this tomorrow
+
 
 def sort_patient(list_of_patient):
     """
@@ -85,8 +96,8 @@ def main():
     print ("Processing...")
     timer_1 = t.time()
     # =============================== Change path here
-    data_set_everything = sf1.openExcelSheet(path, sheet_name="Sheet0")
-    #data_set_everything = sf1.openExcelSheet(path_test, "Sheet1")
+    # data_set_everything = sf1.openExcelSheet(path, sheet_name="Sheet0")
+    data_set_everything = sf1.openExcelSheet(path_test, "Sheet1")
     # ==========================================================================
     
     # ==========================================================================
@@ -128,6 +139,8 @@ def main():
     print("Amount of patient diagnosed = " + str(len(list_of_patient_diagnosed)))
     print("Amount of patient not diagnosed = " + str(len(list_of_patient_not_diagnosed)))
     # ==========================================================================
+    print (list_of_patient_diagnosed)
+    patient_analysis(list_of_patient_diagnosed)
 
 
 if __name__ == "__main__":
