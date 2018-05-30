@@ -82,6 +82,10 @@ def drop_none_important_features(df):
     del df["estrogen_vaginal_rx"]
     del df["urinary_antispas_rx"]
     del df["urinary_inc_rx"]
+    # ==========================================================================
+    del df['tot_meds_cnt'] # in the boolean section but it is not boolean
+                           # instead it is presented as a sum
+                           # also not marked as important, thus dropped
     return df #cleaned df
 
 def clean_history(df):

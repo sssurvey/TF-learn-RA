@@ -99,6 +99,14 @@ def sort_patient(list_of_patient):
     
     return list_of_patient_diagnosed, list_of_patient_not_diagnosed
 
+def output_table_xlsx(df, output_filename): # dataframe, string
+    """
+    helper function to output df back to xlsx
+    to get a better view of all the columns
+    """
+    writer_excel = pd.ExcelWriter(output_filename + ".xlsx")
+    df.to_excel(writer_excel, 'I_DF 2 diff by year')
+    print ("file created")
 
 
 def main():
@@ -126,8 +134,9 @@ def main():
     timer_1 = t.time() - timer_1
     print(timer_1)
     print(data_set_everything.shape)
-    data_set_cleaned = data_set_everything.copy()
-    print("DF cleaned")
+    data_set_cleaned = data_set_everything.copy() 
+    # the cleaned dataset's index is not droped
+    print("DF cleaned") 
     # ==========================================================================
     print("DF grouping")
     timer_1 = t.time()
@@ -152,8 +161,12 @@ def main():
     print("Amount of patient diagnosed = " + str(len(list_of_patient_diagnosed)))
     print("Amount of patient not diagnosed = " + str(len(list_of_patient_not_diagnosed)))
     # ==========================================================================
-    print (list_of_patient_diagnosed)
+    # print (list_of_patient_diagnosed)
+    output_table_xlsx(data_set_cleaned,"output_cleaned_dataSet")
+    # from column [66:] is boolean value [1,0]
     patient_analysis(list_of_patient_diagnosed)
+
+
 
 
 if __name__ == "__main__":
