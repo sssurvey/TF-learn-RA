@@ -110,6 +110,29 @@ def output_table_xlsx(df, output_filename): # dataframe, string
     df.to_excel(writer_excel, 'Sheet1')
     print ("file created")
 
+def sort_cases(cleaned_df): # based on the parameter DF, create 2 DF, based on
+                            # the value of "dcfdx". smaller or larger than 4
+    dcfdx_split_lvl = 4     # diagnosed flag >= 4 diagnosed, smaller than 4 is not
+
+    cleaned_df = cleaned_df.reset_index(drop = True)  # df reindexed
+    # need to create 2 empty df
+    df_column_name_list = list(cleaned_df)
+    tot_rows = cleaned_df.shape[0]
+
+    new_diagnosed_df_by_case = pd.DataFrame(columns=df_column_name_list) #create a new empty df
+    new_not_diagnosed_df_by_case = pd.DataFrame(columns=df_column_name_list)
+
+    for row in range(0, tot_rows):  # loop through all the rows in the DF
+        if cleaned_df.iloc[row]['dcfdx'] >= dcfdx_split_lvl:
+            # get the df row that is larger than 4
+            new_diagnosed_df_by_case = new_diagnosed_df_by_case.append(cleaned_df.iloc[row], ignore_index= True)
+        elif cleaned_df.iloc[row]['dcfdx'] < dcfdx_split_lvl:
+            # get the df row that is smaller than 4
+            new_not_diagnosed_df_by_case = new_not_diagnosed_df_by_case.append(cleaned_df.iloc[row], ignore_index= True)
+        else:
+            continue
+    
+    return new_diagnosed_df_by_case, new_not_diagnosed_df_by_case
 
 def main():
     path = '/Users/haominshi/Desktop/al_data/dataset_576_long.xlsx'
@@ -164,13 +187,17 @@ def main():
     print("Amount of patient not diagnosed = " + str(len(list_of_patient_not_diagnosed)))
     # ==========================================================================
     # print (list_of_patient_diagnosed)
-    output_table_xlsx(data_set_cleaned,"output_cleaned_dataSet")
+    # output_table_xlsx(data_set_cleaned,"output_cleaned_dataSet")
     # from column [66:] is boolean value [1,0]
     patient_analysis(list_of_patient_diagnosed)
 
-    #experiment new tools
+    #experiment new tools - this is added to JUPY
     msno.matrix(data_set_cleaned)
+    sort_cases(data_set_cleaned)
 
+    # 2 DF, one is diagnosed, one is not diagonesed
+    df_diagnosed_df_by_case, df_not_diagnosed_df_by_case = sort_cases(data_set_cleaned)
+    print("2 DF created, grouped by diagnosed and not diagnosed")
 
 
 
