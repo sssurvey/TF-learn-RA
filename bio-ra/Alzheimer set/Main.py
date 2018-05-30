@@ -47,21 +47,32 @@ def grouping(df):
     # print (list_of_patients) #CHECKED
     return list_of_patients # a list of df, that each element of the list is one patient
 
-def patient_analysis(list_of_patient_w, list_of_patient_wo = None):
+def patient_analysis(list_of_patient_diagnosed, list_of_patient_not_diagnosed = None):
     """
     list = [df1, df2, df3 ...]
     Analysis DF on a patient based scale
     """
-    focus = "fu_year"
-    fig = plt.figure()
-    for df in list_of_patient_w:
-        for i in range (5,df.shape[1]):
-            plt.title(df[df.columns[i]].name)
-            plt.grid()
-            plt.xlabel = focus
-            plt.plot(df[focus], df[df.columns[i]])
-            plt.plot(df[focus], df['dcfdx'])
-            plt.show()
+    temp_list_p_diagnosed = list_of_patient_diagnosed.copy()
+    # example of heatMap =  SNS https://stackoverflow.com/questions/12286607/python-making-heatmap-from-dataframe
+    # heatmap matplot = https://stackoverflow.com/questions/12286607/python-making-heatmap-from-dataframe
+    """
+    plan:
+        . . .
+    """
+    interesting_attr = ['chlstrl',
+                        'crn', 'gfr_mdrs', 'glucose',
+                        'hba1c', 'hdlchlstrl',
+                        'hdlratio',
+                        'hemacrit',
+                        'hemoglbn',
+                        'ldlchlstrl',
+                        'mch',
+                        'mchc',
+                        'mcv',
+                        'platelet', 'rbc', 'dcfdx'] # some interesting attr
+    # for patient in temp_list_p_diagnosed:
+        
+        
 
     # need to finish this tomorrow
 
@@ -130,6 +141,8 @@ def main():
     # ==========================================================================
     print("DF sorting")
     timer_1 = t.time()
+
+    # 2 very important asset, all the manipulation use these 2
     list_of_patient_diagnosed, list_of_patient_not_diagnosed = \
     sort_patient(list_of_patient) # return 2 list of patient, split by if diagnosed
                                   # or not diagnosed
