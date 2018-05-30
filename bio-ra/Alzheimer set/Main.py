@@ -6,6 +6,8 @@ import matplotlib.pyplot as plt
 import SingleFocus_1 as sf1
 import Dropper as dropper
 import time as t
+# experiment
+import missingno as msno
 # from pylab import rcParams
 
 
@@ -105,7 +107,7 @@ def output_table_xlsx(df, output_filename): # dataframe, string
     to get a better view of all the columns
     """
     writer_excel = pd.ExcelWriter(output_filename + ".xlsx")
-    df.to_excel(writer_excel, 'I_DF 2 diff by year')
+    df.to_excel(writer_excel, 'Sheet1')
     print ("file created")
 
 
@@ -115,7 +117,7 @@ def main():
     print ("Processing...")
     timer_1 = t.time()
     # =============================== Change path here
-    # data_set_everything = sf1.openExcelSheet(path, sheet_name="Sheet0")
+    #data_set_everything = sf1.openExcelSheet(path, sheet_name="Sheet0")
     data_set_everything = sf1.openExcelSheet(path_test, "Sheet1")
     # ==========================================================================
     
@@ -165,6 +167,9 @@ def main():
     output_table_xlsx(data_set_cleaned,"output_cleaned_dataSet")
     # from column [66:] is boolean value [1,0]
     patient_analysis(list_of_patient_diagnosed)
+
+    #experiment new tools
+    msno.matrix(data_set_cleaned)
 
 
 
