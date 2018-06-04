@@ -134,14 +134,48 @@ def sort_cases(cleaned_df): # based on the parameter DF, create 2 DF, based on
     
     return new_diagnosed_df_by_case, new_not_diagnosed_df_by_case
 
+# newly added code for doing some differnet kinkd of sort... 
+# based on the parameter DF, create 2 DF, based on
+def sort_cases_for_other_stages(cleaned_df):
+                            # the value of "dcfdx". smaller or larger than 4
+    dcfdx_split_lvl_1 = 1     # diagnosed flag >= 4 diagnosed, smaller than 4 is not
+    dcfdx_split_lvl_2 = 2
+    cleaned_df = cleaned_df.reset_index(drop=True)  # df reindexed
+    # need to create 2 empty df
+    df_column_name_list = list(cleaned_df)
+    tot_rows = cleaned_df.shape[0]
+
+    new_diagnosed_df_by_case = pd.DataFrame(
+        columns=df_column_name_list)  # create a new empty df
+    new_not_diagnosed_df_by_case = pd.DataFrame(columns=df_column_name_list)
+
+    for row in range(0, tot_rows):  # loop through all the rows in the DF
+        if cleaned_df.iloc[row]['dcfdx'] >= dcfdx_split_lvl_2:
+            # get the df row that is larger than 4
+            new_diagnosed_df_by_case = new_diagnosed_df_by_case.append(
+                cleaned_df.iloc[row], ignore_index=True)
+        elif cleaned_df.iloc[row]['dcfdx'] == dcfdx_split_lvl_1:
+            # get the df row that is smaller than 4
+            new_not_diagnosed_df_by_case = new_not_diagnosed_df_by_case.append(
+                cleaned_df.iloc[row], ignore_index=True)
+        else:
+            continue
+    return new_not_diagnosed_df_by_case, new_diagnosed_df_by_case
+#---------------------------------------------------------
+# the newly implemented ploting is all in the notebook file, I will just be adding function and algorithm on this py file.
+#---------------------------------------------------------
+df_dcfdx_stage_1, df_dcfdx_stage_4 = \
+    sort_cases_for_other_stages(data_set_cleaned)
+print("sorting completed")
+
 def main():
     path = '/Users/haominshi/Desktop/al_data/dataset_576_long.xlsx'
     path_test = '/Users/haominshi/Desktop/al_data/dataset_testing_short.xlsx'
     print ("Processing...")
     timer_1 = t.time()
     # =============================== Change path here
-    #data_set_everything = sf1.openExcelSheet(path, sheet_name="Sheet0")
-    data_set_everything = sf1.openExcelSheet(path_test, "Sheet1")
+    data_set_everything = sf1.openExcelSheet(path, sheet_name="Sheet0")
+    #data_set_everything = sf1.openExcelSheet(path_test, "Sheet1")
     # ==========================================================================
     
     # ==========================================================================
@@ -199,6 +233,10 @@ def main():
     df_diagnosed_df_by_case, df_not_diagnosed_df_by_case = sort_cases(data_set_cleaned)
     print("2 DF created, grouped by diagnosed and not diagnosed")
 
+    # want to take a look at the difference between avg of df_diagnosed and not_diagnosed
+    df_diagnosed_desc = df_diagnosed_df_by_case.describe()
+    df_not_diagnosed_desc = df_not_diagnosed_df_by_case.describe()
+    # now i think i am going to select the row that is the mean, and compare them
 
 
 if __name__ == "__main__":
