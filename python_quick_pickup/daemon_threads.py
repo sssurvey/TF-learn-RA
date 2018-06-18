@@ -36,10 +36,18 @@ def main():
     create_thread_1 = th.Thread(target=createP1,name="createP1")
     create_thread_2 = th.Thread(target=createP2,name="createP2")
     limit_checker = th.Thread(target=totalLimitChecker,name="limit checker"\
-    ,daemon=True)
+    ,daemon=True) # daemon implemented
     create_thread_1.start(); create_thread_2.start(); limit_checker.start();
     
     create_thread_1.join(); create_thread_2.join(); #limit_checker.join()
+    """
+    here with only the create_thread_1 and create_thread_2 being join(), and we
+    commented out the limit_checker, we are not waiting for the limit_checker
+    anymore, thus after create_thread_1 and 2 join(), the main thread went to the
+    print statement, then main exited, and since we made the limit_checker a 
+    daemon thread, the program exited without waiting for it to responce, since
+    there is no join called, and it is marked as daemon = True
+    """
     print("total ends at -> {}".format(total))
 
 if __name__ == "__main__":
