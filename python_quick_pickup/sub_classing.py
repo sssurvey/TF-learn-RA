@@ -17,6 +17,24 @@ class MyThread(threading.Thread):
             del self._target, self._args, self._kwargs
         print("{} has finished".format(self.getName()))
 
+class MyThreadOther(threading.Thread): # override the __init__ or Thread
+    #def __init__(self, group=None, target=None, name = None, args=(), kwarg=None\
+    #,*,daemon=None):
+    def __init__(self, number, func, args):
+        super(MyThreadOther,self).__init__()
+        self.number = number
+        self.func = func
+        self.args = args
+    def run(self):
+        print("thread {} has started".format(self.number))
+        self.func(*self.args)
+        print("thread {} has finished".format(self.number))
+
+def double(number, cycles):
+    for i in range(cycles):
+        number = number*2
+    print(number)
+
 def sleeper(n, name):
     print("I have being called, and i will sleep for 5 s --->{}".format(name))
     time.sleep(n)
@@ -43,7 +61,15 @@ def main():
     t_thread.start()
     t_thread.join()
 
+    # class 2
+    thread_list_other = []
+    for i in range (50):
+        thread_list_other.append(MyThreadOther(number = i + 1, func=double,\
+        args = [i,15]))
+        thread_list_other[-1].start()
 
+    for thread in thread_list_other:
+        thread.join()
 
     print("main finished")
     pass
